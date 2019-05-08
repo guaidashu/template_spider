@@ -4,7 +4,7 @@
 
 1. Clone the repository.
 
-       git clone 
+       git clone git@github.com:guaidashu/template_spider.git
 
 2. If there's not a directory which called tool, you must get it. 
    
