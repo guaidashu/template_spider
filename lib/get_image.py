@@ -2,27 +2,34 @@
 author songjie
 """
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from lib.common import CommonFunc
 from tool.lib.db import DBConfig
 from tool.lib.function import curl_data, debug
 
 lock = threading.RLock()
 
 GET_CONFIG = {
-    "path": "static/static/images/",
+    "img_aim_path": "static/static/images/",
     "file_name": "",
     "is_record_status": True,
-    "test": False
+    "is_test": False,
+    "img_prefix": "",
+    "img_url_column": "img_url",
+    "header": False
 }
 
 
 class GetImages(object):
-    def __init__(self):
-        self.path = GET_CONFIG.setdefault("path", "static/static/images/")
-        self.file_name = GET_CONFIG['file_name']
-        self.is_record_status = GET_CONFIG['is_record_status']
-        self.test
+    def __init__(self, **kwargs):
+        self.img_aim_path = kwargs.setdefault("img_aim_path", GET_CONFIG['img_aim_path'])
+        self.file_name = kwargs.setdefault("file_name", GET_CONFIG['file_name'])
+        self.is_record_status = kwargs.setdefault("is_record_status", GET_CONFIG['is_record_status'])
+        self.is_test = kwargs.setdefault("is_test", GET_CONFIG['is_test'])
+        self.img_prefix = kwargs.setdefault("img_prefix", GET_CONFIG['img_prefix'])
+        self.img_url_column = kwargs.setdefault("img_url_column", GET_CONFIG['img_url_column'])
+        self.header = kwargs.setdefault("header", GET_CONFIG['header'])
+        self.common = CommonFunc()
         self.db = DBConfig()
 
     def __del__(self):
@@ -33,26 +40,14 @@ class GetImages(object):
 
     def handle(self):
         data = self.get_data()
-        self.get_images(data, "large", img_url="img_url_large")
+        self.get_images(data)
 
-    @classmethod
-    def start_thread(cls, data, fun, path, img_url, prefix):
-        thread_pool = ThreadPoolExecutor(max_workers=15)
-        task_list = list()
-        result = list()
-        for item in data:
-            task = thread_pool.submit(fun, item, path, img_url, prefix)
-            task_list.append(task)
-        for i in as_completed(task_list):
-            result.append(i.result())
-        return result
+    def get_images(self, data):
+        self.common.start_thread(data, self.__get_images)
 
-    def get_images(self, data, path, img_url, prefix=""):
-        self.start_thread(data, self.__get_images, path, img_url, prefix)
-
-    def __get_images(self, item, path, img_url, prefix):
-        page_resource = self.get_page_resource(prefix + item[img_url])
-        with open("static/images/{path}/{id}.jpg".format(path=path, id=item['id']), "wb") as f:
+    def __get_images(self, item):
+        page_resource = self.get_page_resource(self.img_prefix + item[self.img_url_column])
+        with open(self.img_aim_path, "wb") as f:
             try:
                 page_resource = page_resource.encode("utf-8")
             except Exception as e:
