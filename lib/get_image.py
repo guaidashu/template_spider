@@ -10,12 +10,19 @@ from tool.lib.function import curl_data, debug
 lock = threading.RLock()
 
 GET_CONFIG = {
-    "path": ""
+    "path": "static/static/images/",
+    "file_name": "",
+    "is_record_status": True,
+    "test": False
 }
 
 
 class GetImages(object):
     def __init__(self):
+        self.path = GET_CONFIG.setdefault("path", "static/static/images/")
+        self.file_name = GET_CONFIG['file_name']
+        self.is_record_status = GET_CONFIG['is_record_status']
+        self.test
         self.db = DBConfig()
 
     def __del__(self):
