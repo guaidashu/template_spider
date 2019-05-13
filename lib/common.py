@@ -3,10 +3,14 @@ author songjie
 """
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from googletrans import Translator
+
+from tool.lib.function import debug
+
 
 class CommonFunc(object):
     def __init__(self):
-        pass
+        self.translator = Translator(service_urls=['translate.google.cn'])
 
     @staticmethod
     def start_thread(data, fun, max_worker=15, is_test=False, **kwargs):
@@ -30,3 +34,11 @@ class CommonFunc(object):
         for i in as_completed(task_list):
             result.append(i.result())
         return result
+
+    def translate(self, content, dest="zh", src="en"):
+        try:
+            data = self.translator.translate(content, dest, src)
+        except Exception as e:
+            data = ""
+            debug("翻译出错，错误信息：{error}".format(error=e))
+        return data
