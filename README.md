@@ -13,6 +13,10 @@
        cd template_spider
    
        git clone git@github.com:guaidashu/python3_tool_myself.git
+       
+       cd python3_tool_myself
+       
+       mv python3_tool_myself tool
 
 ## Usage
 
