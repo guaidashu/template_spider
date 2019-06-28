@@ -1,4 +1,4 @@
-# **spider template designed by yy**
+# **spider template, designed by yy**
 
 ## Installing and Getting started
 
