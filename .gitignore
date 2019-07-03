@@ -2,3 +2,5 @@
 **/__pycache__
 tool
 test/**
+Pipfile
+Pipfile.lock
