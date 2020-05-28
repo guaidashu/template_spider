@@ -3,9 +3,10 @@ author songjie
 """
 import threading
 
-from lib.common import CommonFunc
-from tool.lib.db import DBConfig
-from tool.lib.function import curl_data, debug
+from tool_yy import debug, curl_data
+from tool_yy.lib.db import DBConfig
+
+from app.lib.common import CommonFunc
 
 lock = threading.RLock()
 
