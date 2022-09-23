@@ -8,7 +8,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 phoenixdb==0.7
-protobuf==3.12.1
+protobuf==3.18.3
 PyMySQL==0.9.3
 requests==2.21.0
 six==1.15.0
